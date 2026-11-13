@@ -1,0 +1,1689 @@
+
+“Encontramos soluciones donde otros ven errores”
+
+
+
+
+
+
+UNIVERSIDAD AUTÓNOMA DE SANTO DOMINGO (UASD)
+Asignatura
+INF3290 – Análisis y Diseño de Sistema
+
+
+Sección
+05
+
+
+Tema
+“Sistema De Reservaciones de Vuelo – Lógica 404”
+
+Sustentantes
+Grupo 05 – Lógica 404
+
+
+Profesor
+Amancio Lorenzo Lorenzo
+
+Fecha
+19 de octubre del 2026
+
+
+Santo Domingo D.N., República Dominicana
+
+Introduccion
+
+
+Alcance
+
+El alcance de este proyecto es el análisis y diseño, no la construcción final. No se requiere trabajar en el desarrollo del software ni con bases de datos. Al final del proceso, cada equipo construye un prototipo como reflejo de los modelos o diagramas creados.
+
+En lugar de implementar una metodología de forma exclusiva, se estará abordando el proyecto con un enfoque híbrido, procurando poner en contexto diversos aspectos de las metodologías presentadas en la asignatura: Ciclo de Vida de Desarrollo de Software (SDLC), Metodología de Análisis y Diseño Orientada a Objetos y Metodología Ágil (principios ágiles).
+
+El proyecto abarca desde la interpretación de la Especificación de Requerimientos de Software (SRS) hasta el diseño de un prototipo visual. Incluye los siguientes elementos:
+
+- Identificación de actores y procesos de negocio (Casos de Uso).
+- Modelado del comportamiento dinámico (Diagramas de Secuencia y Actividad).
+- Definición de la arquitectura estática (Clases, atributos y métodos).
+- Creación de un prototipo de interfaz gráfica de usuario (GUI).
+- Trabajo colaborativo mediante el uso de software de gestión de proyectos y otras herramientas para dar seguimiento al proyecto.
+
+Paso 1 - Introducción, punto de partida
+
+Situación de la empresa
+
+Sistema web para reservación de vuelos en línea
+
+Un dueño de una pequeña aerolínea regional está interesado en ofrecer sus servicios a los clientes a través de un sistema web, para que estos consulten información de vuelos y hagan sus reservaciones en línea.
+
+Después de entrevistar a los gerentes del negocio, los representantes o agentes de boletos y los usuarios finales del sistema, se procede a documentar claramente los procesos del negocio y establecer el alcance del sistema.
+
+Este proceso da como resultado un documento formal donde se detallan los requerimientos funcionales del sistema. Ese documento es un SRS, Especificación de Requerimientos de Software (por sus siglas en inglés, Software Requirements Specification), presentado a continuación.
+
+
+
+Paso 2 - Especificación de Requerimientos de Software (SRS)
+
+Los usuarios no registrados pueden entrar al sitio web de la aerolínea para ver las informaciones de vuelos, pero no pueden hacer reservaciones.
+Los nuevos clientes interesados en reservar vuelos pueden completar un formulario de registro con los siguientes datos: nombre, dirección, nombre de la compañía, número de teléfono y dirección de correo electrónico.
+El cliente es clasificado como corporativo o cliente minorista.
+El cliente puede hacer búsquedas de vuelos basadas en el destino y la hora de partida.
+El cliente puede reservar vuelos indicando el número de vuelo y el número de asiento solicitado.
+El sistema envía una confirmación al cliente vía correo electrónico cuando el vuelo es reservado.
+Los clientes corporativos reciben millas de vuelo cuando sus empleadores reservan vuelos.
+Las millas acumuladas por vuelos frecuentes son utilizadas para aplicar descuentos a futuras solicitudes.
+La reservación puede ser cancelada después de una semana con una devolución del 80%.
+Los representantes o agentes de boletos pueden ver y actualizar la información de vuelos.
+
+
+
+
+
+
+
+
+3.1 Usuarios del sistema o actores
+No.
+Actores
+Funciones
+1
+Usuario no registrado
+Consulta información de vuelos y puede registrarse en el sistema. No puede reservar vuelos hasta disponer de una cuenta registrada.
+2
+Usuario registrado
+Inicia sesión, consulta vuelos, reserva y cancela reservaciones, y realiza el check-in. • Cliente minorista: realiza las funciones habituales de reservación y gestión de sus vuelos.• Cliente corporativo: realiza las funciones del cliente minorista y puede acumular millas de vuelo y utilizarlas para obtener descuentos.• Agente de boletos: accede a las funciones administrativas autorizadas para consultar y actualizar la información de vuelos.
+3
+Servidor de correo electrónico
+Recibe las solicitudes de envío de confirmaciones y entrega al cliente los datos de su reservación por correo electrónico.
+4
+Servidor de migración
+Participa en el proceso de check-in para validar la información migratoria del pasajero.
+5
+Servidor de pago
+Participa en el proceso de reservación y cancelación para validar y procesar los cargos a las tarjetas de crédito o débito de los clientes, así como las devoluciones correspondientes cuando aplique.
+
+
+3.2 Casos de Uso Principales
+
+No.
+Caso de uso
+Actores involucrados
+Descripción del caso de uso
+Condición previa
+Condición posterior
+1
+Consultar información de vuelos
+• Usuario no registrado• Usuario registrado
+Permite consultar la información de los vuelos disponibles según los criterios de búsqueda, incluyendo destinos, horarios, tarifas y disponibilidad de asientos.
+Ninguna
+Se muestran los vuelos encontrados o se informa que no existen resultados.
+2
+Registrarse
+• Usuario no registrado
+Permite crear una cuenta de usuario en el sistema, asociándola con el perfil correspondiente: Cliente Minorista, Cliente Corporativo o Agente de Boletos.
+El usuario no debe tener una cuenta registrada y debe proporcionar los datos requeridos.
+La cuenta queda creada con el perfil correspondiente y el usuario puede iniciar sesión.
+3
+Iniciar sesión
+• Usuario registrado
+Permite a los usuarios registrados autenticarse en el sistema y acceder a las funcionalidades autorizadas según el perfil de su cuenta.
+El usuario debe disponer de una cuenta registrada.
+El usuario accede a las funciones autorizadas o recibe un mensaje de error.
+4
+Reservar vuelos
+• Usuario registrado• Servidor de correo electrónico• Servidor de pago
+Permite gestionar la reservación de vuelos, incluyendo la selección del vuelo y asiento, la aplicación de beneficios por millas, la contratación de servicios adicionales y el procesamiento del pago. Contempla la confirmación de la reservación y la comunicación de sus datos al cliente.
+El cliente debe tener una cuenta registrada, haber iniciado sesión y seleccionar un vuelo con asientos disponibles.
+La reservación queda confirmada y el asiento asignado. Se aplican los descuentos o se acumulan las millas que correspondan. Se solicita el envío de la confirmación por correo.
+5
+Cancelar reservación
+• Usuario registrado• Servidor de correo electrónico• Servidor de pago
+Permite cancelar una reservación confirmada de acuerdo con las políticas establecidas, gestionar el reembolso correspondiente y liberar el asiento asociado a la reservación.
+El cliente debe haber iniciado sesión y tener una reservación confirmada dentro del plazo permitido de siete días.
+La reservación queda cancelada, el asiento se libera y se aplica una devolución del 80 %. Se solicita el envío de la notificación de cancelación.
+6
+Actualizar información de vuelos
+• Usuario registrado (perfil de agente de boletos)• Servidor de correo electrónico
+Permite al Agente de Boletos modificar y mantener actualizada la información de los vuelos autorizados. También contempla la notificación por correo electrónico a los clientes afectados cuando corresponda.
+El agente debe haber iniciado sesión, contar con autorización y seleccionar un vuelo existente.
+La información del vuelo queda actualizada. Cuando corresponda, se solicita el envío de una notificación por correo electrónico.
+7
+Realizar check-in
+• Usuario registrado• Servidor de migración
+Permite gestionar el registro de los pasajeros para abordar un vuelo previamente reservado, sujeto a la validación de la reservación, al período habilitado y a las verificaciones correspondientes del sistema de migración.
+El pasajero debe tener una reservación confirmada y encontrarse dentro del plazo permitido para realizar el check-in (2 a 5 horas antes de abordar)
+El pasajero obtiene su pase de abordar o recibe un mensaje indicando por qué no puede completar el proceso.
+
+3.3 Procesos Alternativos
+Caso de uso
+No.
+Procesos alternativos
+Descripción
+Tipo
+Registrarse
+1
+Contraseña inválida
+El sistema solicita introducir una contraseña válida.
+Flujo alternativo
+
+2
+Correo electrónico ya registrado
+El sistema informa que el correo está asociado a otra cuenta.
+Flujo alternativo
+
+3
+Campos obligatorios incompletos
+El sistema solicita completar o corregir los datos requeridos.
+Flujo alternativo
+Iniciar sesión
+4
+Credenciales incorrectas
+El sistema muestra un mensaje de error y permite volver a intentarlo.
+Flujo alternativo
+
+5
+Usuario no registrado
+El sistema rechaza el acceso e indica que se necesita una cuenta registrada.
+Flujo alternativo
+
+6
+Campos de acceso vacíos
+El sistema solicita completar los campos obligatorios.
+Flujo alternativo
+Reservar vuelos
+7
+Vuelo o asiento no disponible
+El sistema informa que no hay disponibilidad y permite seleccionar otra opción.
+Flujo alternativo
+
+8
+Solicitar servicios adicionales
+El cliente puede solicitar equipaje extra, comida especial u otros servicios antes de confirmar la reservación.
+Flujo alternativo
+
+9
+Gestionar millas y descuentos por fidelización
+Los clientes corporativos pueden acumular millas y los clientes con saldo suficiente pueden utilizarlas para obtener descuentos, según las condiciones aplicables.
+Flujo alternativo
+
+10
+Procesar pago de reservación
+Cuando la reservación requiere un pago, el sistema solicita al servidor de pago validar la tarjeta de crédito o débito y procesar el cargo correspondiente. El sistema utiliza el resultado de la operación para determinar si puede confirmar la reservación.
+Caso de uso extendido (<<extend>>)
+
+11
+Enviar confirmación de reservación por correo electrónico
+Después de seleccionar los servicios adicionales y aplicar los descuentos por millas que correspondan, el sistema solicita al servidor de pago validar la tarjeta de crédito o débito y procesar el cargo por el importe final de la reservación. Si el pago es exitoso, se continúa con la confirmación de la reservación.
+Caso de uso extendido (<<extend>>)
+ 
+12
+Pago rechazado
+La entidad bancaria o servidor de pago declina la transacción por fondos insuficientes o datos incorrectos, permitiendo reintentar o cancelar.
+Flujo alternativo
+Cancelar reservación
+13
+Solicitud fuera del plazo de siete días
+El sistema rechaza la cancelación porque la solicitud no cumple con el plazo permitido.
+Flujo alternativo
+
+14
+Reservación inexistente o ya cancelada
+El sistema informa que no puede procesar la solicitud.
+Flujo alternativo
+
+15
+Procesar devolución de reservación
+Cuando se cumplen las condiciones para cancelar la reservación con derecho a devolución, el sistema solicita al servidor de pago procesar el reembolso correspondiente al 80 % del importe pagado.
+Caso de uso extendido (<<exclude>>)
+
+16
+Enviar notificación de cancelación por correo electrónico
+Después de cancelar la reservación, el sistema solicita al servidor de correo electrónico enviar una notificación al cliente.
+Caso de uso extendido (<<exclude>>)
+Actualizar información de vuelos
+17
+Vuelo no encontrado
+El sistema informa que el vuelo seleccionado no existe.
+Flujo alternativo
+
+18
+Datos inválidos
+El sistema solicita corregir los datos antes de guardar los cambios.
+Flujo alternativo
+
+19
+Agente sin autorización
+El sistema impide realizar modificaciones sin los permisos correspondientes.
+Flujo alternativo
+
+20
+Notificar actualización de vuelo por correo electrónico
+Después de guardar los cambios, el sistema solicita al servidor de correo electrónico notificar a los clientes afectados.
+Caso de uso extendido (<<exclude>>)
+
+21
+Código de reservación o datos inválidos
+El sistema informa que no pudo localizar o validar la reservación.
+Flujo alternativo
+Realizar check-in
+22
+Fuera del plazo establecido
+El sistema informa que el check-in no está disponible en ese momento.
+Flujo alternativo
+
+23
+Servidor de migración no disponible
+El sistema informa que no puede completar la validación y permite intentarlo nuevamente cuando el servicio esté disponible.
+Flujo alternativo
+
+24
+Check-in ya realizado
+El sistema informa que el proceso ya fue completado y permite consultar el pase de abordar existente.
+Flujo alternativo
+
+25
+Validar información migratoria
+El servidor de migración valida que la información migratoria del cliente es valida
+Caso de uso extendido (<<exclude>>)
+
+26
+Validación migratoria no aprobada
+El servidor de migración informa que la validación no fue aprobada, ya que los datos del usuario son inválidos.
+Flujo alternativo
+Consultar información de vuelos
+27
+No se encuentran vuelos disponibles
+El sistema procesa los criterios ingresados por el usuario (destino y hora de partida), pero no encuentra ningún vuelo en la base de datos que coincida exactamente con dichos parámetros.
+Flujo alternativo
+
+28
+Criterios de búsqueda incompletos o inválidos
+El usuario intenta realizar la consulta omitiendo uno o ambos campos obligatorios (destino u hora de partida) o introduce un formato no válido.
+Flujo alternativo
+
+
+4. Diagrama de Casos de Uso
+
+
+
+5.1 Escenarios Principales
+No.
+ID Escenario
+Caso de uso
+Actores involucrados
+Pasos
+Resultado esperado
+1
+ESC-CIV-01
+Consultar información de vuelos
+• Usuario no registrado• Usuario registrado
+1. El usuario (registrado o no registrado) accede al sistema.  2. El usuario indica el destino y la hora de partida que desea consultar.   3. El sistema procesa los criterios de búsqueda ingresados por el usuario.4. El sistema busca en su base de datos los vuelos que coinciden con los parámetros especificados.   5. El sistema muestra en pantalla los vuelos encontrados, detallando los horarios, las tarifas aplicables y la disponibilidad de asientos.   
+Muestra en pantalla de forma clara los vuelos disponibles que cumplen exactamente con dichos parámetros.
+2
+ESC-RG-01
+Registrarse
+• Usuario no registrado
+1. El usuario accede a la opción de registro.2. El sistema muestra el formulario de registro.3. El usuario introduce sus datos personales, dirección, teléfono, correo electrónico y credenciales.4. El usuario selecciona el perfil de cuenta: cliente minorista, cliente corporativo o agente de boletos.5. Si selecciona cliente minorista, completa los datos específicos requeridos para ese perfil. Si selecciona cliente corporativo, proporciona la información de la compañía. Si selecciona agente de boletos, completa los datos requeridos para ese perfil.6. El usuario envía el formulario.7. El sistema valida los datos introducidos y verifica que el correo electrónico no esté registrado.8. El sistema crea la cuenta con el perfil seleccionado.9. El sistema informa al usuario que el registro se completó correctamente.
+La cuenta queda creada con el perfil correspondiente y el usuario puede iniciar sesión.
+3
+ESC-IS-01
+Iniciar Sesión
+• Usuario registrado
+1. El usuario accede a la pantalla de inicio de sesión de la aerolínea.2. El sistema muestra los campos correspondientes para la introducción de las credenciales de acceso.3. El usuario introduce su correo electrónico o nombre de usuario y su contraseña.4. El usuario selecciona la opción iniciar sesión.5. El sistema valida las credenciales introducidas contra la base de datos de usuarios registrados.6. El sistema verifica el tipo de cuenta asociado al usuario: cliente minorista, cliente corporativo o agente de boletos.7. El sistema concede el acceso y redirige al usuario hacia el panel o las funcionalidades correspondientes a su tipo de cuenta.
+El usuario se ha autenticado de forma exitosa en el sistema, pudiendo ver las opciones y funcionalidades correspondientes a su perfil de cuenta.
+4
+ESC-RV-01
+Reservar vuelos
+• Usuario registrado• Servidor de pago• Servidor de correo electrónico
+1. Al usuario se le presenta el formulario de búsqueda de vuelos en el portal.2. El usuario ingresa los criterios de búsqueda (origen, destino, fechas, número de pasajeros y clase) y envía la solicitud.3. El sistema realiza la verificación de disponibilidad en tiempo real en la base de datos.4. El sistema presenta la lista de vuelos y tarifas disponibles.5. El usuario selecciona el vuelo de su preferencia.6.  Al usuario se le presenta el mapa interactivo de asientos disponibles y los campos para los datos de los pasajeros.7. El usuario selecciona su asiento, completa la información de los pasajeros y confirma la selección.8. El sistema valida los datos y presenta el desglose total del monto a pagar con las opciones de pago.9. El usuario selecciona el método de pago tarjeta de crédito/débito y autoriza la transacción.10. El sistema envía los datos de pago al servidor de pago, registra la reserva con estado "Confirmada", actualiza la disponibilidad de asientos y solicita al servidor de correo electrónico el envío de la confirmación.11. Al usuario se le presenta la pantalla de confirmación con su código de localizador (PNR) y el resumen del itinerario.
+La reservación queda confirmada, el asiento asignado y se muestra en pantalla la confirmación con el código PNR, solicitando el envío del comprobante por correo electrónico.
+5
+ESC-CR-01
+Cancelar reservación
+• Usuario registrado• Servidor de correo electrónico• Servidor de pago
+1. El usuario consulta sus reservaciones.2. El sistema muestra las reservaciones registradas.3. El usuario selecciona la reservación que desea cancelar y solicita su cancelación.4. El sistema verifica la fecha de la reservación y el plazo permitido para cancelarla.5. El sistema solicita al servidor de pago procesar la devolución del 80 % del importe pagado.6. El servidor de pago procesa exitosamente la devolución.7. El sistema cancela la reservación y libera el asiento correspondiente.8. El sistema solicita al servidor de correo electrónico enviar una notificación de cancelación.9. El servidor de correo electrónico envía la notificación al usuario.10. El sistema confirma que la reservación ha sido cancelada.
+La reservación queda cancelada con éxito, el servidor de pago procesa la devolución del 80% del pago y el servidor de correo envía una confirmación al correo electrónico.
+6
+ESC-AIV-01
+Actualizar información de vuelos
+• Usuario registrado (perfil de agente de boletos)• Servidor de correo electrónico
+1. El agente de boletos accede a la opción de actualizar información de vuelos.2. El sistema muestra los vuelos registrados.3. El agente consulta y selecciona el vuelo que desea actualizar.4. El sistema muestra la información actual del vuelo seleccionado.5. El agente modifica los datos correspondientes del vuelo.6. El agente solicita guardar los cambios.7. El sistema valida que la información introducida sea correcta.8. El sistema guarda los cambios y actualiza la información del vuelo.9. Cuando la actualización afecta a los clientes, el sistema solicita al servidor de correo electrónico enviar una notificación a los clientes correspondientes.10. El servidor de correo electrónico procesa la solicitud y envía las notificaciones.
+La información del vuelo queda actualizada correctamente y, cuando corresponde, los clientes afectados reciben una notificación por correo electrónico.
+7
+ESC-RC-01
+Realizar check-in
+• Usuario registrado• Sistema de migración
+1. El pasajero accede a la opción de check-in.2. El sistema solicita el código de reservación y el apellido del pasajero.3. El pasajero introduce los datos solicitados.4. El sistema localiza y valida la reservación.5. El sistema verifica que el check-in esté permitido según el plazo establecido.6. El sistema envía al Sistema de migración la información necesaria para realizar las validaciones correspondientes.7. El Sistema de migración procesa la solicitud y devuelve el resultado de la validación.8. El sistema verifica el resultado recibido y, si se cumplen las condiciones requeridas, completa el check-in.9. El sistema genera y muestra el pase de abordar al pasajero.
+El sistema muestra que el check-in fue exitoso, genera un pase de abordar y se lo muestra al usuario.
+
+5.2 Escenarios Alternativos
+No.
+ID Escenario
+Caso de uso
+Actores involucrados
+Proceso Alternativo
+Pasos
+Resultado esperado
+1
+ESC-AL-CIV-01
+Consultar información de vuelos
+• Usuario no registrado• Usuario registrado
+No se encuentran vuelos disponibles
+1.El sistema verifica que la consulta no arroja registros coincidentes.2.El sistema muestra un mensaje claro en la interfaz informando al usuario que no existen resultados para los criterios especificados.   3.El sistema ofrece opciones al usuario para modificar los filtros de búsqueda (cambiar de fecha, hora o destino).
+El sistema muestra un mensaje claro que informa explícitamente al usuario que no existen resultados coincidentes para el destino y la hora de partida especificados.
+2
+ESC-AL-CIV-02
+
+
+Criterios de búsqueda incompletos o inválidos
+1.El sistema detecta la ausencia de datos requeridos o un formato incorrecto al procesar la solicitud.2.El sistema interrumpe la búsqueda y muestra un mensaje de validación o advertencia indicando qué campos son obligatorios o deben corregirse.3.El usuario completa o corrige la información en el formulario y reintenta la búsqueda, retomando el flujo principal.
+El sistema interrumpe el proceso de búsqueda al detectar campos obligatorios vacíos o formatos incorrectos, evitando procesar datos erróneos. Muestra en pantalla advertencias o mensajes de validación específicos que señalan qué campos deben ser corregidos o completados, permitiendo al usuario enmendar la información y reintentar la operación.
+3
+ESC.AL-RG-01
+Registrarse
+• Usuario no registrado
+Contraseña inválida
+1. El usuario accede a la opción de registro.2. El sistema muestra el formulario de registro.3. El usuario introduce sus datos personales, dirección, teléfono, correo electrónico y credenciales.4. El usuario selecciona el perfil correspondiente: cliente minorista, cliente corporativo o agente de boletos.5. El usuario completa los datos específicos requeridos para el perfil seleccionado.6. El usuario envía el formulario.7. El sistema valida los datos y detecta que la contraseña no cumple los requisitos establecidos.8. El sistema informa al usuario que la contraseña es inválida y solicita introducir una contraseña válida.9. El usuario corrige la contraseña y vuelve a enviar el formulario.10. El sistema valida los datos corregidos y continúa con el registro.
+La contraseña cumple los requisitos y el sistema puede completar el registro de la cuenta.
+4
+ESC.AL-RG-02
+
+
+Correo electrónico ya registrado
+1. El usuario accede a la opción de registro.2. El sistema muestra el formulario de registro.3. El usuario introduce sus datos personales, dirección, teléfono, correo electrónico y credenciales.4. El usuario selecciona el perfil correspondiente: cliente minorista, cliente corporativo o agente de boletos.5. El usuario completa los datos específicos requeridos para el perfil seleccionado.6. El usuario envía el formulario.7. El sistema valida los datos e identifica que el correo electrónico ya está asociado a otra cuenta.8. El sistema informa al usuario que el correo ya está registrado y solicita uno diferente.9. El usuario introduce otro correo electrónico y vuelve a enviar el formulario.10. El sistema valida los datos corregidos y continúa con el registro.
+El sistema acepta un correo electrónico disponible y puede completar el registro de la cuenta.
+5
+ESC.AL-RG-03
+
+
+Campos obligatorios incompletos
+1. El usuario accede a la opción de registro.2. El sistema muestra el formulario de registro.3. El usuario introduce sus datos personales, dirección, teléfono, correo electrónico y credenciales.4. El usuario selecciona el perfil correspondiente: cliente minorista, cliente corporativo o agente de boletos.5. El usuario completa los datos específicos requeridos para el perfil seleccionado.6. El usuario envía el formulario.7. El sistema valida la información e identifica que faltan datos obligatorios.8. El sistema informa cuáles campos deben completarse.9. El usuario completa los campos señalados y vuelve a enviar el formulario.10. El sistema valida los datos corregidos y continúa con el registro.
+El formulario contiene todos los datos obligatorios y el sistema puede completar el registro de la cuenta.
+6
+ESC-AL-IS-01
+Iniciar Sesión
+• Usuario registrado
+Credenciales incorrectas
+1. El usuario accede a la pantalla de inicio de sesión de la aerolínea.2. El sistema muestra los campos correspondientes para la introducción de las credenciales de acceso.3. El usuario introduce su correo electrónico o nombre de usuario y su contraseña.4. El usuario selecciona la opción iniciar sesión.5. El sistema valida las credenciales y detecta que la contraseña no coincide con el registro del usuario.6. El sistema rechaza el acceso y muestra un mensaje de error informando que uno de los campos es incorrecto, permitiendo al usuario volver a intentarlo.
+El acceso es rechazado, se notifica el error de autenticación en pantalla y se retiene al usuario en la vista de inicio de sesión para un nuevo intento.
+7
+ESC-AL-IS-02
+
+
+Usuario no registrado
+1. El usuario accede a la pantalla de inicio de sesión de la aerolínea.2. El sistema muestra los campos correspondientes para la introducción de las credenciales de acceso.3. El usuario introduce su correo electrónico y su contraseña.4. El usuario selecciona la opción iniciar sesión.5. El sistema busca el correo ingresado en los registros y determina que no corresponde a ninguna cuenta activa.6. El sistema rechaza el acceso y muestra una notificación informando que las credenciales no pertenecen a una cuenta registrada.
+El acceso es bloqueado y se le sugiere al usuario la opción de registrarse previamente en la plataforma.
+8
+ESC-AL-IS-03
+
+
+Campos de acceso vacíos
+1. El usuario accede a la pantalla de inicio de sesión de la aerolínea.2. El sistema muestra los campos correspondientes para la introducción de las credenciales de acceso.3. El usuario introduce su correo electrónico y su contraseña.4. El usuario selecciona la opción iniciar sesión.5. El sistema ejecuta una validación previa de campos obligatorios y detecta que se encuentran vacíos.6. El sistema detiene el proceso de autenticación y resalta gráficamente los campos faltantes con un mensaje de aviso.
+La validación interna impide procesar la solicitud de inicio de sesión hasta que el usuario complete los campos requeridos
+
+No.
+ID Escenario
+Caso de uso
+Actores involucrados
+Proceso Alternativo
+Pasos
+Resultado esperado
+9
+ESC-AL-RV-01
+Reservar vuelos
+• Usuario registrado
+Vuelo o asiento no disponible
+1. Al usuario se le presenta el formulario de búsqueda de vuelos en el portal.2. El usuario ingresa los criterios de búsqueda (origen, destino, fechas, número de pasajeros y clase) y envía la solicitud.3. El sistema realiza la verificación de disponibilidad en tiempo real en la base de datos.4. El sistema detecta que el vuelo está agotado o el asiento seleccionado ya no se encuentra disponible.5.  El sistema detiene el avance de la reserva y presenta en pantalla la alerta: "Atención: El asiento o vuelo seleccionado ya no se encuentra disponible. Por favor, seleccione una ubicación alternativa o un nuevo horario."6. El usuario visualiza la alerta, selecciona otra opción disponible en la interfaz y retoma el flujo de confirmación.
+Se evita la sobreventa de asientos en el sistema, notificando de inmediato al usuario para que seleccione una opción alternativa antes de proceder al pago.
+10
+ESC-AL-RV-02
+
+
+Pago rechazado
+1. Al usuario se le presenta el formulario de búsqueda de vuelos en el portal.2. El usuario ingresa los criterios de búsqueda (origen, destino, fechas, número de pasajeros y clase) y envía la solicitud.3. El sistema realiza la verificación de disponibilidad en tiempo real en la base de datos.4. El sistema presenta la lista de vuelos y tarifas disponibles.5. El usuario selecciona el vuelo de su preferencia.6. Al usuario se le presenta el mapa interactivo de asientos disponibles y los campos para los datos de los pasajeros.7. El usuario selecciona su asiento, completa la información de los pasajeros y confirma la selección.8. El sistema valida los datos y presenta el desglose total del monto a pagar con las opciones de pago.9. El usuario selecciona el método de pago tarjeta de crédito/débito y autoriza la transacción.10. El sistema envía los datos de pago al servidor de pago, pero este retorna un código de rechazo (ej. "Fondos insuficientes" o "Transacción declinada por la entidad bancaria").11. El sistema mantiene la sesión activa, libera temporalmente el bloqueo del asiento y presenta la alerta: "Error de pago: Su transacción no pudo ser procesada. Verifique los datos de la tarjeta o seleccione un método de pago diferente."12. El usuario visualiza la notificación y selecciona la opción de reintentar con otra tarjeta o cancelar la operación.
+La reserva no se confirma en el sistema, el asiento permanece libre en el inventario y no se emite ningún comprobante ni localizador (PNR)
+11
+ESC-AL-RV-03
+
+
+Gestionar millas y descuentos por fidelización
+1. Al usuario se le presenta el formulario de búsqueda de vuelos en el portal.2. El usuario ingresa los criterios de búsqueda (origen, destino, fechas, número de pasajeros y clase) y envía la solicitud.3. El sistema realiza la verificación de disponibilidad en tiempo real en la base de datos.4. El sistema presenta la lista de vuelos y tarifas disponibles.5.  El usuario selecciona el vuelo de su preferencia.6. Al usuario se le presenta el mapa interactivo de asientos disponibles y los campos para los datos de los pasajeros.7. El usuario selecciona su asiento, completa la información de los pasajeros y confirma la selección.8. El sistema valida los datos y presenta el desglose total del monto a pagar con las opciones de pago.9. El usuario marca la casilla "Usar saldo de Millas Corporativas".10. El sistema consulta el balance de millas del cliente corporativo en el registro de fidelización.11. El sistema valida que el saldo es suficiente y recalcula en pantalla el monto neto a pagar aplicando la bonificación correspondiente.12. El usuario confirma el uso de las millas y procede a autorizar el saldo restante con su tarjeta.13. El sistema envía los datos de pago al servidor de pago, registra la reserva con estado "Confirmada", actualiza la disponibilidad de asientos y solicita al servidor de correo electrónico el envío de la confirmación.14. Al usuario se le presenta la pantalla de confirmación con su código de localizador (PNR) y el resumen del itinerario.
+El balance de millas del cliente corporativo se actualiza, la reserva queda confirmada con el precio bonificado y se envía la confirmación correspondiente
+12
+ESC-AL-RV-04
+
+
+Solicitar servicios adicionales
+1. Al usuario se le presenta el formulario de búsqueda de vuelos en el portal.2. El usuario ingresa los criterios de búsqueda (origen, destino, fechas, número de pasajeros y clase) y envía la solicitud.3. El sistema realiza la verificación de disponibilidad en tiempo real en la base de datos.4. El sistema presenta la lista de vuelos y tarifas disponibles.5. El usuario selecciona el vuelo de su preferencia.6. Al usuario se le presenta el mapa interactivo de asientos disponibles, los campos para los datos de los pasajeros y la sección de servicios adicionales (equipaje extra, selección de menú especial, abordaje prioritario).7. El usuario selecciona los servicios adicionales deseados, su asiento, completa la información de los pasajeros y confirma la selección.8. El sistema recalcula el costo total incluyendo los servicios adicionales, valida los datos y presenta el desglose total del monto a pagar.9. El usuario selecciona el método de pago tarjeta de crédito/débito y autoriza la transacción.10. El sistema envía los datos de pago al servidor de pago, registra la reserva con estado "Confirmada" incluyendo los servicios adicionales, actualiza la disponibilidad de asientos y solicita al servidor de correo electrónico el envío de la confirmación.11. Al usuario se le presenta la pantalla de confirmación con su código de localizador (PNR), el resumen del itinerario y el desglose de los servicios adicionales contratados.
+La reserva se confirma incluyendo los servicios adicionales seleccionados y el monto total actualizado.
+13
+ESC-AL-CR-01
+Cancelar reservación
+• Usuario registrado• Servidor de correo electrónico• Servidor de pago
+Solicitud fuera del plazo de siete días
+1. El usuario consulta sus reservaciones.2. El sistema muestra las reservaciones registradas.3. El usuario selecciona la reservación que desea cancelar y solicita su cancelación.4. El sistema verifica la fecha de la reservación y el plazo permitido para cancelarla.5. El sistema detecta que la solicitud está fuera del plazo de siete días.6. El sistema informa al usuario que no es posible cancelar la reservación debido a que se ha excedido el plazo permitido.7. El proceso de cancelación finaliza sin modificar la reservación.
+El sistema rechaza la solicitud de cancelación, informa al usuario que se ha excedido el plazo permitido y mantiene la reservación sin cambios. No se procesa ninguna devolución.
+14
+ESC-AL-CR-02
+
+
+Reservación inexistente o ya cancelada
+1. El usuario consulta sus reservaciones.2. El sistema muestra las reservaciones registradas.3. El usuario selecciona la reservación que desea cancelar y solicita su cancelación.4. El sistema verifica la existencia y el estado actual de la reservación.5. El sistema detecta que la reservación no existe o que ya se encuentra cancelada.6. El sistema informa al usuario que no es posible procesar la solicitud de cancelación.7. El proceso finaliza sin realizar una nueva cancelación ni procesar otra devolución.
+El sistema informa al usuario que la reservación no existe o ya fue cancelada. No realiza una nueva cancelación ni procesa una devolución duplicada.
+
+No.
+ID Escenario
+Caso de uso
+Actores involucrados
+Proceso Alternativo
+Pasos
+Resultado esperado
+15
+ESC-AL-AIV-01
+Actualizar información de vuelos
+• Usuario registrado (perfil de agente de boletos)• Servidor de correo electrónico
+Vuelo no encontrado
+1. El agente de boletos accede a la opción de actualizar información de vuelos.2. El sistema muestra los vuelos registrados.3. El agente consulta y selecciona el vuelo que desea actualizar.4. El sistema verifica la existencia del vuelo seleccionado o buscado.5. El sistema detecta que el vuelo no existe o no se encuentra registrado.6. El sistema informa al agente que no puede encontrar el vuelo solicitado.7. El sistema permite al agente realizar una nueva búsqueda.
+El sistema informa que el vuelo no fue encontrado y no realiza ninguna modificación.
+16
+ESC-AL-AIV-02
+
+
+Datos inválidos
+1. El agente de boletos accede a la opción de actualizar información de vuelos.2. El sistema muestra los vuelos registrados.3. El agente consulta y selecciona el vuelo que desea actualizar.4. El sistema muestra la información actual del vuelo seleccionado.5. El agente modifica los datos correspondientes del vuelo.6. El agente solicita guardar los cambios.7. El sistema valida la información introducida.8. El sistema detecta que uno o varios datos son inválidos o no cumplen con las reglas establecidas.9. El sistema informa al agente cuáles datos debe corregir.10. El agente corrige la información y vuelve a solicitar que se guarden los cambios.
+El sistema no guarda la información inválida y solicita al agente corregir los datos antes de continuar
+17
+ESC-AL-AIV-03
+
+
+Agente sin autorización
+1. El agente de boletos accede a la opción de actualizar información de vuelos.2. El sistema verifica los permisos del agente para realizar modificaciones.3. El sistema detecta que el agente no está autorizado para actualizar la información de los vuelos.4. El sistema deniega el acceso a la operación.5. El sistema informa al agente que no cuenta con los permisos necesarios.6. El proceso finaliza sin realizar modificaciones en la información de los vuelos.
+El sistema impide que el agente realice modificaciones y mantiene la información de los vuelos sin cambios.
+18
+ESC.AL-RC-01
+Realizar check-in
+• Usuario registrado• Sistema de migración
+Código de reservación o datos inválidos
+1. El pasajero accede a la opción de check-in.2. El sistema solicita el código de reservación y el apellido del pasajero.3. El pasajero introduce los datos solicitados.4. El sistema intenta localizar y validar la reservación, pero no encuentra una coincidencia válida.5. El sistema informa que los datos introducidos son incorrectos o que no se pudo localizar la reservación.6. El sistema solicita revisar los datos y permite intentarlo nuevamente.
+El pasajero puede corregir los datos e intentar localizar la reservación. El check-in no se completa mientras la reservación no pueda validarse.
+19
+ESC.AL-RC-02
+
+
+Fuera del plazo establecido
+1. El pasajero accede a la opción de check-in.2. El sistema solicita el código de reservación y el apellido del pasajero.3. El pasajero introduce los datos solicitados.4. El sistema localiza y valida la reservación.5. El sistema verifica el plazo permitido e identifica que el check-in no está disponible en ese momento.6. El sistema informa al pasajero que no puede realizar el check-in debido al plazo establecido (2 a 5 Horas antes de abordar).
+El check-in no se completa porque el pasajero se encuentra fuera del plazo permitido.
+20
+ESC.AL-RC-03
+
+
+Servidor de migración no disponible
+1. El pasajero accede a la opción de check-in.2. El sistema solicita el código de reservación y el apellido del pasajero.3. El pasajero introduce los datos solicitados.4. El sistema localiza y valida la reservación y verifica que el check-in está permitido.5. El sistema envía al servidor de migración la información necesaria para las validaciones correspondientes.6. El servidor de migración no responde o no está disponible para procesar la solicitud.7. El sistema informa al pasajero que no puede completar el check-in porque no fue posible realizar la validación migratoria.8. El sistema permite intentar nuevamente cuando el servicio esté disponible.
+El check-in queda pendiente y no se genera el pase de abordar hasta que puedan completarse las validaciones requeridas.
+21
+ESC.AL-RC-04
+
+
+Check-in ya realizado
+1. El pasajero accede a la opción de check-in.2. El sistema solicita el código de reservación y el apellido del pasajero.3. El pasajero introduce los datos solicitados.4. El sistema localiza y valida la reservación.5. El sistema identifica que el check-in ya fue completado para esa reservación.6. El sistema informa al pasajero que el check-in ya se realizó y permite consultar el pase de abordar existente.
+El sistema evita repetir el check-in y permite al pasajero consultar el pase de abordar existente.
+22
+ESC.AL-RC-05
+
+
+Validación migratoria no aprobada
+1. El pasajero accede a la opción de check-in.2. El sistema solicita el código de reservación y el apellido del pasajero.3. El pasajero introduce los datos solicitados.4. El sistema localiza y valida la reservación y verifica que el check-in está permitido.5. El sistema envía al servidor de migración la información necesaria para las validaciones correspondientes.6. El Sistema de migración informa que la verificacion no fue aprobada ya que los datos del usuario son invalidos.7. El sistema informa al pasajero que no puede completar el check-in porque su informacion migratoria no es válida.
+El sistema muestra un mensaje donde explica que el servidor de migración ha informado que el estatus migratorio del usuario no es válido.
+
+6. Diagramas de Secuencia
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+7.1 Identificar Las Clases
+NO.
+Caso de Uso
+Posibles clases
+1
+Registrarse
+- FormularioRegistro- ControlRegistro- RepositorioUsuarios- CuentaUsuario
+2
+Realizar Check In
+- FormularioCheckIn- ControlCheckIn- RepositorioReservas-  Reservacion- PaseAbordar
+3
+Reservar vuelos
+- FormularioReserva- ControlReserva- RepositorioReservas- Reservacion- ServidorPago- ServidorCorreo
+4
+Cancelar Reservación
+- FormularioCancelarReservacion- ControlCancelacion- RepositorioReservas- ServidorPago- ServidorCorreo 
+5
+Actualizar Información de Vuelo
+ - FormularioActualizarVuelo  - ControlActualizarVuelo - RepositorioVuelos - Vuelo - ServidorCorreo
+6
+Consultar información de vuelos
+ - FormularioConsulta  - ControlConsulta - RepositorioVuelos - Vuelo - CriterioBusqueda
+7
+Iniciar sesión
+ - FormularioLogin - ControlLogin - RepositorioUsuarios   - CuentaUsuario  - Sesion  
+
+7.2 Identificar Los Miembros De La Clase
+
+NO.
+Casos de Uso
+Clases
+Atributos
+Métodos
+Tipo de datos
+1
+Consultar información de vuelos
+FormularioConsulta
+ -busqueda -mensajeAlerta -estadoPantalla
+ - ingresarCriterios(CriterioBusqueda: busqueda):void - mostrarResultados(listaVuelos: List<Vuelo>) :viod - mostrarAlerta(mensaje: String): void - resaltarCamposFaltantes(campos: List<String>):void
+• CriterioBusqueda• String• String
+2
+
+ControlConsulta
+ - criteriosValidos
+ - procesarBusqueda(): Boolean - validarCamposObligatorios(destino: String, horaPartida: DateTime): Boolean - evaluarCoincidencias(listaVuelos: List<Vuelo>): Boolean
+• Boolean
+3
+
+RepositorioVuelos
+ - cadenaConexion
+ - consultarVuelos(destino: String, horaPartida: DateTime): List<Vuelo>
+• String
+4
+
+Vuelo
+ - idVuelo - destino - horaPartida - tarifa - disponibilidadAsientos
+-
+• Integer• String• DateTime• Decimal• Integer
+5
+
+CriterioBusqueda
+ - destinoFiltro - horaPartidaFiltro
+-
+• String• DateTime
+6
+Iniciar sesión
+FormularioLogin
+ - correoIngresado - contraseñaIngresada - mensajeError - camposFaltantes
+- mostrarFormularioLogin(): void- enviarCredenciales(correo: String, contrasena: String): void- informarCamposPendientes(campos: List<String>): void- informarCredencialesInvalidas(): void- informarUsuarioNoRegistrado(): void- solicitarReintento(): void- mostrarConfirmacionAcceso(): void- redirigirPanel(tipoCuenta: String): void
+• String• String• String
+7
+
+ControlLogin
+ - correoValidado - contraseñaValidada - intentosFallidos - autenticado
+- procesarLogin(correo: String, contrasena: String): boolean- validarCamposObligatorios(correo: String, contrasena: String): List<String>- verificarTipoCuenta(idUsuario: int): String- crearSesion(cuenta: CuentaUsuario): Sesion- permitirReintento(): void
+• int• string• boolean
+8
+
+RepositorioUsuarios
+ - correoConsultado - usuarioEncontrado - contraseñaAlmacenada
+- buscarUsuarioPorCorreo(correo: String): CuentaUsuario- verificarContrasena(correo: String, contrasena: String): boolean
+• String• CuentaUsuario
+9
+
+CuentaUsuario
+ - idUsuario - correo - contrasena - tipoCuenta - nombreUsuario
+- getTipoCuenta(): String- validarContrasena(contrasena: String): boolean
+• int• String• String• TipoCuenta• String
+10
+
+Sesion
+ - idSesion - cuentaUsuario - estadoSesion - fechaInicio
+- crearSesion(cuenta: CuentaUsuario): void- getEstado(): boolean- cerrarSesion(): void
+• String• Date• boolean• CuentaUsuario
+11
+Reservar vuelos
+FormularioReserva
+- origenSeleccionado- destinoSeleccionado- fechaSalida- numPasajeros- asientoSeleccionado- mensajeError
+- solicitarBuscadorVuelos(): void- mostrarBuscadorVuelos(): void- enviarCriteriosBusqueda(origen: String, destino: String, fecha: Date, pasajeros: int): void- mostrarListaVuelos(vuelos: List<Vuelo>): void- seleccionarVueloYAsiento(vueloId: int, asientoId: String): void- seleccionarServiciosAdicionales(servicios: List<Servicio>): void- aplicarMillasCorporativas(): void- mostrarResumenPago(montoTotal: double): void- autorizarPago(datosTarjeta: DatosTarjeta): void- notificarNoDisponible(): void- notificarErrorPago(): void- mostrarConfirmacion(PNR: String): void
+• String• String• Date• int• String• String
+12
+
+ControlReserva
+- montoTotalCalculado- estadoTransaccion- codigoPNRGenerado
+- procesarBusqueda(criterios: CriteriosBusqueda): List<Vuelo>- validarDisponibilidadAsiento(asientoId: String): Boolean- asociarServiciosAdicionales(servicios: List<Servicio>): void- solicitarDescuentoMillas(): void- confirmarReserva(datosPago: DatosTarjeta): void- procesarCobro(datosTarjeta: DatosTarjeta, monto: double): Boolean- generarCodigoPNR(): String- liberarBloqueoAsiento(): void
+• double• String• String
+13
+
+RepositorioReservas
+- cadenaConexion
+- consultarVuelosDisponibles(criterios: CriteriosBusqueda): List<Vuelo>- guardarReservacion(reserva: Reservacion): Boolean
+• String
+
+NO.
+Casos de Uso
+Clases
+Atributos
+Métodos
+Tipo de datos
+14
+Reservar vuelos
+Reservacion
+- codigoPNR- asientoAsignado- montoTotal- estadoReserva- fechaReserva- millasDescontadas
+- crearReserva(vueloId: int, clienteId: int): Reservacion- descontarMillas(millas: int): void- asociarServicios(servicios: List<Servicio>): void- getPNR(): String- getEstado(): String
+• String• String• double• String• Date• int
+15
+
+ServidorPago
+- endpointAPI- tokenAutorizacion
+- procesarCobro(datosTarjeta: DatosTarjeta, monto: double): Boolean- retornarCodigoRechazo(): String- retornarConfirmacion(): Boolean
+• String• String
+16
+
+ServidorCorreo
+- servidorSMTP
+- enviarComprobanteReserva(email: String, PNR: String): Boolean
+• String
+17
+Cancelar reservación
+FormularioCancelarVuelos
+- Codigo PNR- Motivo_Cancelacion- Confirmacion_Cancelacion
+- ConsultarReservaciones()- MostrarReservaciones()- SeleccionarReservación()- SolicitarCancelación()
+• Int• String• Bool
+18
+
+ControlCancelacion
+- Monto_Reembolso_Calculado- Fecha_Y_Plazo
+- VerificarFechaYPlazo()- CancelarReservacion()- CalcularReembolso()
+• Double• String
+19
+
+RepositorioReservas
+CadenaConexion
+- ActualizarReservacion()
+• String
+20
+
+ServidorPago
+- endpointAPI- tokenAutorizacion
+- ProcesarDevolucion()                                           
+• String• String
+21
+
+ServidorCorreo
+ServidorSMTP
+- EnviarComprobanteCancelacion()
+• String
+22
+Actualizar Información del vuelo
+FormularioActualizarVuelo
+- Vuelos- IDVueloSeleccionado
+- mostrarVuelos()- seleccionarVuelo(id: string)- mostrarInformacionVuelo()- modificarDatosVuelo()- GuardarCambios()
+• vuelos: List<Vuelo>• IDVueloSeleccionado: int
+23
+
+ControlActualizarVuelo
+-
+- validarInformacion()- verificarClientesAfectados()
+• bool
+24
+
+ServidorCorreo
+ServidorSMTP
+- obtenerClientesAfectados()- enviarNotificacionActualizacion()
+• String
+25
+Registrarse
+FormularioRegistro
+- nombreIngresado- direccionIngresada- telefonoIngresado- correoIngresado- contrasenaIngresada- perfilSeleccionado- nombreCompaniaIngresado- erroresVisibles- mensajeVisible
+- mostrarFormularioReg(): void- enviarFormulario(datos: Map<String, String>, perfil: String): void- informarCamposPendientes(campos: List<String>): void- informarContrasenaInvalida(): void- informarCorreoExistente(): void- mostrarErrores(errores: List<String>): void- solicitarContrasenaValida(): void- solicitarOtroCorreo(): void- mostrarConfirmacion(): void
+• String• String (opcional)• List<String>
+26
+
+ControlRegistro
+- erroresValidacion- registroValido
+- procesarRegistro(datos: Map<String, String>, perfil: String): void- validarCamposObligatorios(datos: Map<String, String>): List<String>- validarContrasena(contrasena: String): boolean- marcarDatosValidos(): void
+• List<String>• boolean
+27
+
+RepositorioUsuarios
+-
+- correoRegistrado(email: String): boolean- guardarCuenta(datos: Map<String, String>, perfil: String): CuentaUsuario
+-
+28
+
+CuentaUsuario
+- idUsuario- nombre- direccion- telefono- correo- contrasena- perfil- nombreCompania
+- CuentaUsuario(datos: Map<String, String>, perfil: String)
+• String• String (opcional)• int
+
+NO.
+Casos de Uso
+Clases
+Atributos
+Métodos
+Tipo de datos
+29
+Realizar check-in
+FormularioCheckIn
+- codigoIngresado- apellidoIngresado- erroresVisibles- mensajeVisible- paseAbordarMostrado
+- mostrarFormularioCheckIn(): void- enviarSolicitud(codigo: String, apellido: String): void- informarDatosInvalidos(): void- informarPlazoNoPermitido(): void- informarServicioNoDisponible(): void- informarValidacionNoAprobada(): void- mostrarError(mensaje: String): void- mostrarPaseAbordar(pase: PaseAbordar): void
+• String• List<String>• PaseAbordar
+30
+
+ControlCheckIn
+- mensajeError- resultadoValidacionMigratoria- checkInCompletado
+- procesarCheckIn(codigo: String, apellido: String): void- verificarPlazo(reservacion: Reservacion): boolean- verificarEstadoCheckIn(reservacion: Reservacion): boolean- completarCheckIn(reservacion: Reservacion): void- detectarTimeOut(): boolean- generarPaseAbordar(reservacion: Reservacion): PaseAbordar- verificarResultadoMigratorio(resultado: String): boolean
+• String• boolean
+31
+
+RepositorioReservas
+-
+- buscarReservacion(codigo: String, apellido: String): Reservacion- registrarCheckIn(reservacion: Reservacion): void- obtenerPaseAbordar(reservacion: Reservacion): PaseAbordar- guardarPaseAbordar(pase: PaseAbordar): void
+-
+32
+
+Reservacion
+- codigoPNR- nombrePasajero- apellidoPasajero- numeroVuelo- asientoAsignado- fechaHoraAbordaje- estadoReserva- estadoCheckIn
+-
+• DateTime• String
+33
+
+PaseAbordar
+- codigoPase- codigoReservacion- nombrePasajero- apellidoPasajero- numeroVuelo- asiento- fechaHoraAbordaje- fechaEmision
+-
+• String• DateTime
+
+7.3 Notación UML
+
+FormularioRegistro
+ - nombreIngresado: String
+
+
+ 
+ - direccionIngresada: String
+
+
+ 
+ - telefonoIngresado: String
+
+
+ 
+ - correoIngresado: String
+
+
+ 
+ - contrasenaIngresada: String
+
+
+ 
+ - perfilSeleccionado: String
+
+
+ 
+ - nombreCompaniaIngresado: String?
+
+
+ 
+ - erroresVisibles: List<String>
+
+
+ 
+ - mensajeVisible: String
+
+
+ 
+ + capturarCredenciales(correo: String, contrasena: String): void
+ 
+ 
+ 
+ + mostrarFormularioReg(): void
+
+
+ 
+ + enviarFormulario(datos: Map<String, String>, perfil: String): void
+
+
+ 
+ + informarCamposPendientes(campos: List<String>): void
+
+
+ 
+ + informarContrasenaInvalida(): void
+
+
+ 
+ + informarCorreoExistente(): void
+
+
+ 
+ + mostrarErrores(errores: List<String>): void
+
+
+ 
+ + solicitarContrasenaValida(): void
+
+
+ 
+ + solicitarOtroCorreo(): void
+
+
+ 
+ + mostrarConfirmacion(): void
+ 
+ 
+ 
+
+ControlRegistro
+ - erroresValidacion: List<String>
+
+
+ 
+ - registroValido: boolean
+
+
+ 
+ + procesarRegistro(datos: Map<String, String>, perfil: String): void
+ 
+ 
+ 
+ + validarCamposObligatorios(datos: Map<String, String>): List<String>
+
+
+ 
+ + validarContrasena(contrasena: String): boolean
+
+
+ 
+ + marcarDatosValidos(): void
+ 
+ 
+ 
+
+RepositorioUsuarios
+ - correoConsultado: String
+
+
+ 
+ - usuarioEncontrado: CuentaUsuario
+
+
+ 
+ - contrasenaAlmacenada: String
+
+
+ 
+ + correoRegistrado(email: String): boolean
+ 
+ 
+ 
+ + guardarCuenta(datos: Map<String, String>, perfil: String): CuentaUsuario
+
+
+ 
+ + buscarUsuarioPorCorreo(correo: String): CuentaUsuario
+
+
+ 
+ + verificarContrasena(correo: String, contrasena: String): Boolean
+ 
+ 
+ 
+
+CuentaUsuario
+ - idUsuario: int
+
+
+ 
+ - nombre: String
+
+
+ 
+ - direccion: String
+
+
+ 
+ - telefono: String
+
+
+ 
+ - correo: String
+
+
+ 
+ - contrasena: String
+
+
+ 
+ - perfil: String
+
+
+ 
+ - nombreCompania: String?
+
+
+ 
+ - tokenAutorizacion: String
+
+
+ 
+ - tipoCuenta: TipoCuenta
+
+
+ 
+ - nombreUsuario: String
+
+
+ 
+ + CuentaUsuario(datos: Map<String, String>, perfil: String)
+ 
+ 
+ 
+ +  getTipoCuenta(): TipoCuenta
+
+
+ 
+ + validarContrasena(contrasena: String): Boolean
+ 
+ 
+ 
+
+FormularioLogin
+ - correoIngresado : String
+
+
+ 
+ - contrasenaIngresada: String
+
+
+ 
+ - mensajeError: String
+
+
+ 
+ - camposFaltantes: List<String>
+
+
+ 
+ + capturarCredenciales(correo: String, contrasena: String): void
+ 
+ 
+ 
+ + mostrarMensajeError(mensaje: String): void
+
+
+ 
+ + resaltarCamposFaltantes(campos: List<String>): void
+
+
+ 
+ + redirigirPanel(tipoCuenta: TipoCuenta): void
+ 
+ 
+ 
+
+ControlLogin
+ - correoValidado: String
+
+
+ 
+ - contrasenaValidada: String
+
+
+ 
+ - intentosFallidos: int
+
+
+ 
+ - autenticado: boolean
+
+
+ 
+ + iniciarSesion(correo: String, contrasena: String): Boolean
+ 
+ 
+ 
+ + validarCamposObligatorios(correo: String, contrasena: String): Boolean
+
+
+ 
+ + verificarTipoCuenta(idUsuario: int): TipoCuenta
+
+
+ 
+ + crearSesion(cuenta: CuentaUsuario): Sesion
+ 
+ 
+ 
+
+Sesion
+ -  idSesion: int
+
+
+ 
+ -  cuentaUsuario: CuentaUsuario
+
+
+ 
+ - estadoSesion: boolean
+
+
+ 
+ - fechaInicio: Date
+
+
+ 
+ + crearSesion(cuenta: CuentaUsuario): void
+ 
+ 
+ 
+ + getEstado(): Boolean
+
+
+ 
+ + cerrarSesion(): void
+ 
+ 
+ 
+
+
+
+FormularioConsulta
+ - busqueda: CriterioBusqueda
+
+
+ 
+ - mensajeAlerta: String
+
+
+ 
+ - estadoPantalla: String
+
+
+ 
+ + ingresarCriterios(CriterioBusqueda: busqueda):void
+ 
+ 
+ 
+ + mostrarResultados(listaVuelos: List<Vuelo>):viod
+
+
+ 
+ + mostrarAlerta(mensaje: String): void
+
+
+ 
+ + resaltarCamposFaltantes(campos: List<String>):void
+ 
+ 
+ 
+
+ControlConsulta
+ -  criteriosValidos: Boolean
+
+
+ 
+ + procesarBusqueda(): Boolean
+ 
+ 
+ 
+ +  validarCamposObligatorios(destino: String, horaPartida: DateTime): Boolean
+
+
+ 
+ + evaluarCoincidencias(listaVuelos: List<Vuelo>): Boolean
+ 
+ 
+ 
+
+CriterioBusqueda
+ - destinoFiltro: String
+
+
+ 
+ - horaPartidaFiltro: DateTime
+
+
+ 
+ 
+ 
+ 
+ 
+
+RepositorioVuelos
+ - cadenaConexion: String
+
+
+ 
+ + consultarVuelos(destino: String, horaPartida: DateTime): List<Vuelo>
+ 
+ 
+ 
+
+Vuelo
+ - 
+
+
+ 
+ + idVuelo: Integer
+ 
+ 
+ 
+ + destino: String
+
+
+ 
+ + horaPartida: DateTime
+
+
+ 
+ + tarifa: Decimal
+
+
+ 
+ + disponibilidadAsientos: Integer
+ 
+ 
+ 
+
+FormularioReserva
+ - origenSeleccionado : String
+
+
+ 
+ - destinoSeleccionado : String
+
+
+ 
+ - fechaSalida : Date
+
+
+ 
+ - numPasajeros : int
+
+
+ 
+ - asientoSeleccionado : String
+
+
+ 
+ - mensajeError : String
+
+
+ 
+ + solicitarBuscadorVuelos(): void
+ 
+ 
+ 
+ + mostrarBuscadorVuelos(): void
+
+
+ 
+ + enviarCriteriosBusqueda(origen: String, destino: String, fecha: Date, pasajeros: int): void
+
+
+ 
+ + mostrarListaVuelos(vuelos: List<Vuelo>): void
+
+
+ 
+ + seleccionarVueloYAsiento(vueloId: int, asientoId: String): void
+
+
+ 
+ + seleccionarServiciosAdicionales(servicios: List<Servicio>): void
+
+
+ 
+ + aplicarMillasCorporativas(): void
+
+
+ 
+ + mostrarResumenPago(montoTotal: double): void
+
+
+ 
+ + autorizarPago(datosTarjeta: DatosTarjeta): void
+
+
+ 
+ + notificarNoDisponible(): void
+
+
+ 
+ + notificarErrorPago(): void
+
+
+ 
+ + mostrarConfirmacion(PNR: String): void
+
+
+ 
+ + ConsultarVueloReservado(PNR: String) String
+ 
+ 
+ 
+
+ControlReserva
+ - montoTotalCalculado : double = 0.0
+
+
+ 
+ - estadoTransaccion : String = "PENDIENTE"
+
+
+ 
+ - codigoPNRGenerado : String
+
+
+ 
+ + procesarBusqueda(criterios: CriteriosBusqueda): List<Vuelo>
+ 
+ 
+ 
+ + validarDisponibilidadAsiento(asientoId: String): Boolean
+
+
+ 
+ + asociarServiciosAdicionales(servicios: List<Servicio>): void
+
+
+ 
+ + solicitarDescuentoMillas(): void
+
+
+ 
+ + confirmarReserva(datosPago: DatosTarjeta): void
+
+
+ 
+ + procesarCobro(datosTarjeta: DatosTarjeta, monto: double): Boolean
+
+
+ 
+ + generarCodigoPNR(): String
+
+
+ 
+ + liberarBloqueoAsiento(): void
+ 
+ 
+ 
+
+RepositorioReservas
+ - cadenaConexion: String
+
+
+ 
+ + consultarVuelosDisponibles(criterios: CriteriosBusqueda): List<Vuelo>
+ 
+ 
+ 
+ + guardarReservacion(reserva: Reservacion): Boolean
+
+
+ 
+ + buscarReservacion(codigo: String, apellido: String): reservacion
+
+
+ 
+ + registrarCheckIn(reservacion: reservacion): void
+
+
+ 
+ + obtenerPaseAbordar(reservacion: reservacion): PaseAbordar
+
+
+ 
+ + guardarPaseAbordar(pase: PaseAbordar): void
+
+
+ 
+ + ActualizarReservacion()
+ 
+ 
+ 
+
+ServidorPago
+ - endpointAPI : String
+
+
+ 
+ - tokenAutorizacion : String
+
+
+ 
+ + procesarCobro(datosTarjeta: DatosTarjeta, monto: double): Boolean
+ 
+ 
+ 
+ + retornarCodigoRechazo(): String
+
+
+ 
+ + retornarConfirmacion(): Boolean
+
+
+ 
+ + ProcesarDevolución(DatosTarjeta: String, monto: double): Boolean 
+ 
+ 
+ 
+
+
+
+Reservacion
+ - codigoPNR : String
+
+
+ 
+ - asientoAsignado : String
+
+
+ 
+ - montoTotal : double
+
+
+ 
+ - estadoReserva : String = "CONFIRMADA"
+
+
+ 
+ - fechaReserva : Date
+
+
+ 
+ - millasDescontadas : int = 0
+
+
+ 
+ - nombrePasajero: String
+
+
+ 
+ - apellidoPasajero: String
+
+
+ 
+ - numeroVuelo: String
+
+
+ 
+ - fechaHoraAbordaje: DateTime
+
+
+ 
+ - estadoCheckIn: String
+
+
+ 
+ + crearReserva(vueloId: int, clienteId: int): Reservacion
+ 
+ 
+ 
+ + descontarMillas(millas: int): void
+
+
+ 
+ + asociarServicios(servicios: List<Servicio>): void
+
+
+ 
+ + getPNR(): String
+
+
+ 
+ + getEstado(): String
+ 
+ 
+ 
+
+ServidorCorreo
+ - servidorSMTP : String
+ 
+ + enviarComprobanteReserva(email: String, PNR: String): Boolean
+ + EnviarComprobanteCancelación(email: String, PNR: String): Boolean
+ + ObtenerClientesAfectados()
+ 
+ + EnviarNotificaciónActualización
+
+FormularioActualizarVuelo
+ - Vuelo: List<Vuelo>
+
+
+ 
+ - IDVueloSeleccionado: Int
+
+
+ 
+ + MostrarVuelos()
+ 
+ 
+ 
+ + SeleccionarVuelo(ID: String)
+
+
+ 
+ + MostrarInformacionVuelo()
+
+
+ 
+ + ModificarDatosVuelo)
+
+
+ 
+ + GuardarCambios()
+ 
+ 
+ 
+
+ControlActualizarVuelo
+ - 
+
+
+ 
+ + ValidarInformación()
+ 
+ 
+ 
+ + VerificarClientesAfectados
+ 
+ 
+ 
+
+FormularioCancelarVuelos
+ -  Codigo PNR: String
+
+
+ 
+ - MotivoCancelacion: String
+
+
+ 
+ - Confirmacion_Cancelacion
+
+
+ 
+ + consultarReservaciones(): void
+ 
+ 
+ 
+ + mostrarReservaciones(): void
+
+
+ 
+ + seleccionarReservacion(ID: String): void
+
+
+ 
+ + solicitarCancelacion(): void
+
+
+ 
+ + mostrarConfirmacion(): void
+ 
+ 
+ 
+
+ControlCancelacion
+ - Monto_Reembolso_Calculado: String
+
+
+ 
+ -  Fecha_Y_Plazo: Date
+
+
+ 
+ + VerificarFechaYPlazo()
+ 
+ 
+ 
+ +  CancelarReservacion(ID: String) bool
+
+
+ 
+ + CalcularReembolso(double) void
+ 
+ 
+ 
+
+FormularioCheckIn
+ - codigoIngresado: String
+
+
+ 
+ - apellidoIngresado: String
+
+
+ 
+ - erroresVisibles: List<String>
+
+
+ 
+ - mensajeVisible: String
+
+
+ 
+ - paseAbordarMostrado: PaseAbordar
+
+
+ 
+ + mostrarFormularioCheckIn(): void
+ 
+ 
+ 
+ + enviarSolicitud(codigo: String, apellido: String): void
+
+
+ 
+ + informarDatosInvalidos(): void
+
+
+ 
+ + informarPlazoNoPermitido(): void
+
+
+ 
+ + informarServicioNoDisponible(): void
+
+
+ 
+ + informarValidacionNoAprobada(): void
+
+
+ 
+ + mostrarError(mensaje: String): void
+
+
+ 
+ + mostrarPaseAbordar(pase: PaseAbordar): void
+ 
+ 
+ 
+
+ControlCheckIn
+ - mensajeError: String
+
+
+ 
+ - resultadoValidacionMigratoria: String
+
+
+ 
+ - checkInCompletado: boolean
+
+
+ 
+ + procesarCheckIn(codigo: String, apellido: String): void
+ 
+ 
+ 
+ + verificarPlazo(reservacion: reservacion): boolean
+
+
+ 
+ + verificarEstadoCheckIn(reservacion: reservacion): boolean
+
+
+ 
+ + completarCheckIn(reservacion: reservacion): void
+
+
+ 
+ + detectarTimeOut(): boolean
+
+
+ 
+ + generarPaseAbordar(reservacion: reservacion): PaseAbordar
+
+
+ 
+ + verificarResultadoMigratorio(resultado: String): boolean
+ 
+ 
+ 
+
+PaseAbordar
+ - codigoPase: String
+
+
+ 
+ - codigoReservacion: String
+
+
+ 
+ - nombrePasajero: String
+
+
+ 
+ - apellidoPasajero: String
+
+
+ 
+ - numeroVuelo: String
+
+
+ 
+ - asiento: String
+
+
+ 
+ - fechaHoraAbordaje: DateTime
+
+
+ 
+ - fechaEmision: DateTime
+
+
+ 
+ + 
+ 
+ 
+ 
+
+8.0 Diagrama De Clase
+
+

@@ -1,0 +1,7 @@
+{
+  "booking": "www.booking.com_styles.css",
+  "kayak": "booking.kayak.com_styles.css",
+  "bookingBytes": 861007,
+  "kayakBytes": 1847882,
+  "nota": "Extractos reutilizados en src/styles/referencias.css. Se omiten reglas de publicidad, fuentes y recursos remotos."
+}

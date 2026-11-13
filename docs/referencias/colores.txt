@@ -1,0 +1,37 @@
+Estos son los colores utilizados en el último logo del robot de Logica 404:
+
+Azul marino oscuro
+
+Contorno y estructura del robot
+
+#041F3F
+
+
+
+Azul eléctrico
+
+Ojos en X y antena
+
+#078CE8
+
+
+
+Blanco
+
+Borde interior y laterales
+
+#FFFFFF
+
+
+
+Negro
+
+Fondo de la imagen
+
+#000000
+
+
+
+Los códigos HEX son aproximaciones representativas, ya que la imagen contiene ligeros degradados.
+
+Para mantener la identidad visual de Logica 404 en la página web, te recomiendo usar el azul marino como color principal, el azul eléctrico para botones y elementos destacados, y el blanco para fondos y textos de contraste.

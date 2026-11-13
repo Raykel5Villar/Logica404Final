@@ -1,0 +1,53 @@
+/* Extractos de los CSS proporcionados. Alias semanticos y colores de Logica 404.
+ * Booking: espaciado, radios, contenedores y badges. KAYAK: filas de navegacion.
+ * Se omiten reglas de publicidad, recursos remotos y selectores ajenos al prototipo. */
+:root {
+  --bui_spacing_1x:4px;
+  --bui_spacing_2x:8px;
+  --bui_spacing_3x:12px;
+  --bui_spacing_4x:16px;
+  --bui_spacing_6x:24px;
+  --bui_spacing_8x:32px;
+  --bui_spacing_12x:48px;
+  --bui_spacing_16x:64px;
+  --bui_spacing_half:2px;
+  --bui_border_width_100:1px;
+  --bui_border_width_200:2px;
+  --bui_border_radius_100: 2px;
+  --bui_border_radius_200: 4px;
+  --bui_border_radius_300: 6px;
+  --bui_color_background:#fff;
+  --bui_color_on_background:#041f3f;
+  --bui_color_border:#e5eaf0;
+  --bui_color_action_background:#078ce8;
+  --bui_color_brand_primary_background:#041f3f;
+}
+.a5e03e7b9e,.card {
+  border-radius:var(--bui_border_radius_300)
+}
+.d0acd69e66,.btn {
+  border-radius:var(--bui_border_radius_200)
+}
+.be2633211c,.card {
+  border-color:var(--bui_color_border)
+}
+.cd3e7df908,.badge {
+  background-color:var(--bui_color_background);
+  border:var(--bui_border_width_100) solid #0000;
+  border-radius:var(--bui_border_radius_100);
+  color:var(--bui_color_on_background);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:calc(var(--bui_spacing_half) - var(--bui_border_width_100)) var(--bui_spacing_1x)
+}
+.vg06,.account-dropdown a {
+  cursor:pointer;
+  border-radius:4px;
+  align-items:center;
+  width:100%;
+  padding:12px;
+  text-decoration:none;
+  display:flex
+}
