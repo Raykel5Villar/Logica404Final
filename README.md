@@ -49,6 +49,7 @@ Tarjeta aprobada: `4242 4242 4242 4242`, vencimiento `12/30`, CVV `123` y titula
 - Panel de agente con filtros, exportación CSV, edición de horario, tarifa, estado y puerta, notificación a clientes afectados y actividad reciente.
 - Bandeja de correo simulada, mensajes pendientes, reintento de entrega, cuenta personal y movimientos de millas.
 - Diseño adaptable, navegación por teclado, diálogos con gestión del foco, alertas accesibles y soporte para movimiento reducido.
+- Selector de moneda USD, DOP y EUR, disponible también en móvil, con preferencia persistente y conversión visual mediante tasas fijas de demostración. Los importes del modelo de negocio se conservan en USD.
 
 ## Organización
 

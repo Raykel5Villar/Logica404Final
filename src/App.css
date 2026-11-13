@@ -1861,7 +1861,10 @@
   margin-bottom:14px
 }
 .auth-register .field input,.auth-register .field select {
-  height:42px
+  height:auto;
+  min-height:48px;
+  padding-block:10px;
+  line-height:1.5
 }
 .auth-register .auth-intro {
   margin-bottom:21px

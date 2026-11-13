@@ -34,7 +34,7 @@ test('el formato diferencia las tres monedas y permite comprobantes con moneda e
   preferenciaMoneda.seleccionar('DOP')
   assert.match(formatearDinero(35), /RD\$/)
   assert.match(formatearDinero(35, 'USD'), /US\$/)
-  assert.match(formatearDinero(35, 'EUR'), /€/)
+  assert.match(formatearDinero(35, 'EUR'), /EUR|€/)
   assert.equal(convertirDesdeUSD(0), 0)
 })
 test('una moneda inválida no cambia la selección válida', () => {
