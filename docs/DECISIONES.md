@@ -12,7 +12,7 @@
 
 El documento no fija importes ni fórmula de fidelización. Se adoptan estas reglas, visibles antes de pagar:
 
-- Moneda USD e impuestos de US$ 24 por pasajero.
+- Moneda base USD e impuestos de US$ 24 por pasajero. El selector permite visualizar precios en USD, DOP o EUR y conserva la preferencia local. Las conversiones usan tasas fijas de demostración: 1 USD = 60 DOP = 0.92 EUR. Los importes originales, cobros y reembolsos del modelo permanecen en USD; no se consultan tasas externas.
 - Ejecutiva: 1.7 veces la tarifa base económica; mismos impuestos y servicios.
 - Maleta adicional de hasta 23 kg: US$ 35; menú vegetariano: US$ 18; prioridad de abordaje: US$ 15 por persona. Cada servicio seleccionado se aplica a todos los pasajeros.
 - De uno a cuatro pasajeros por reserva; mapa de 48 asientos con un mismo precio.

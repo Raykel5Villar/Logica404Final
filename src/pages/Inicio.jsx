@@ -2,7 +2,7 @@ import { useState } from 'react'
 import FormularioConsulta from '../components/FormularioConsulta.jsx'
 import { Icon, Button, Badge } from '../components/UI.jsx'
 import { navegar, useApp } from '../context.jsx'
-import { sumarDias } from '../domain/datos.js'
+import { sumarDias, dinero } from '../domain/datos.js'
 import { almacen } from '../domain/almacen.js'
 
 export const DESTINOS = [
@@ -13,7 +13,7 @@ export const DESTINOS = [
 ]
 export function buscarDestino(destino) { navegar(`/vuelos?${new URLSearchParams({ origen: destino.origen || 'SDQ', destino: destino.codigo, fecha: sumarDias(1, almacen.ahora()), pasajeros: '1', clase: 'economica' })}`) }
 export function TarjetaDestino({ destino }) {
-  return <button className="destination-card" onClick={() => buscarDestino(destino)}><div className="destination-photo"><img src={`/images/${destino.imagen}.jpg`} alt={`Descubre ${destino.ciudad}`} loading="lazy" /><span className="destination-tag"><Icon name="flight" size={13} /> Vuelo directo</span><span className="destination-arrow"><Icon name="arrow" size={20} /></span></div><div className="destination-body"><span className="destination-country">{destino.pais}</span><h3>{destino.ciudad}</h3><p>{destino.etiqueta}</p><div className="destination-price"><span>Solo ida desde</span><strong>US$ {destino.precio}<small> / persona</small></strong></div></div></button>
+  return <button className="destination-card" onClick={() => buscarDestino(destino)}><div className="destination-photo"><img src={`/images/${destino.imagen}.jpg`} alt={`Descubre ${destino.ciudad}`} loading="lazy" /><span className="destination-tag"><Icon name="flight" size={13} /> Vuelo directo</span><span className="destination-arrow"><Icon name="arrow" size={20} /></span></div><div className="destination-body"><span className="destination-country">{destino.pais}</span><h3>{destino.ciudad}</h3><p>{destino.etiqueta}</p><div className="destination-price"><span>Solo ida desde</span><strong>{dinero(destino.precio)}<small> / persona</small></strong></div></div></button>
 }
 export default function Inicio() {
   const [categoria, setCategoria] = useState('todos')

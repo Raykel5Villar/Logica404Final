@@ -1,4 +1,5 @@
 import { dinero, fechaBonita, hora } from './datos.js'
+import { MONEDAS, preferenciaMoneda } from './moneda.js'
 
 export function comprobante(reserva, vuelo) {
   return `LÓGICA 404 AIRLINES
@@ -12,6 +13,8 @@ Salida: ${fechaBonita(vuelo.horaPartida, true)} · ${hora(vuelo.horaPartida)} (U
 Pasajeros:
 ${reserva.pasajeros.map(p => `  ${p.nombre} ${p.apellido} · Asiento ${p.asiento}`).join('\n')}
 Total pagado: ${dinero(reserva.montoTotal)}
+Moneda de visualización: ${MONEDAS[preferenciaMoneda.obtener()].nombre}${preferenciaMoneda.obtener() === 'USD' ? '' : ' (tasa fija de demostración)'}
+Importe original en USD: ${dinero(reserva.montoTotal, 'USD')}
 Servicios: ${reserva.servicios.join(', ') || 'Sin servicios adicionales'}
 Millas utilizadas: ${reserva.millasDescontadas}
 ${reserva.reembolso ? `Reembolso: ${dinero(reserva.reembolso)}\n` : ''}

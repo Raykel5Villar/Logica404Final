@@ -6064,3 +6064,78 @@ tbody tr:hover {
     justify-content:space-between;
   }
 }
+
+/* Selector de moneda disponible en escritorio y móvil. */
+.currency {
+  display:flex;
+  position:relative;
+  align-items:center;
+  gap:0;
+  color:var(--navy);
+}
+.currency select {
+  appearance:none;
+  width:76px;
+  min-height:42px;
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:9px 23px 9px 11px;
+  background:#fff;
+  font-size:.875rem;
+  font-weight:650;
+  cursor:pointer;
+}
+.currency>svg {
+  position:absolute;
+  right:8px;
+  pointer-events:none;
+}
+.currency select:hover {
+  border-color:var(--blue);
+  background:var(--pale);
+}
+.swap-button,.destination-arrow {
+  border-radius:4px;
+}
+.empty-icon {
+  border-radius:6px;
+}
+.price-breakdown .total {
+  flex-wrap:wrap;
+}
+.flight-price>strong,.trip-meta strong {
+  overflow-wrap:anywhere;
+}
+@media(max-width:480px) {
+  .header-inner {
+    gap:8px;
+  }
+  .header-inner .brand {
+    font-size:1.25rem;
+    gap:4px;
+  }
+  .header-inner .brand-code {
+    font-size:1.6875rem;
+  }
+  .header-actions {
+    gap:8px;
+  }
+  .currency select {
+    width:62px;
+    padding-left:8px;
+    padding-right:18px;
+    font-size:.8125rem;
+  }
+  .currency>svg {
+    right:5px;
+    width:10px;
+  }
+  .login-label,.account-toggle>span:not(.user-avatar),.account-toggle>svg {
+    display:none;
+  }
+  .login-link {
+    justify-content:center;
+    width:29px;
+    min-height:38px;
+  }
+}
