@@ -23,4 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 .browser-qa/
+.browser-qa-redesign/
 artifacts/

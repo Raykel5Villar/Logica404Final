@@ -12,9 +12,11 @@
   --navy:#041f3f;
   --blue:#078ce8;
   --blue-dark:#066bb4;
-  --muted:#6c7888;
-  --line:#e5eaf0;
-  --pale:#f4f8fc;
+  --muted:#536477;
+  --line:#d6dfe7;
+  --control-border:#7c8d9e;
+  --pale:#f3f6f8;
+  --font-display:Georgia,'Times New Roman',serif;
   --green:#167856;
   --radius:var(--bui_border_radius_300)
 }
@@ -59,7 +61,7 @@ input,select,textarea {
   color:var(--navy)
 }
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible {
-  outline:3px solid #078ce866;
+  outline:3px solid var(--blue-dark);
   outline-offset:3px
 }
 input[type=checkbox],input[type=radio] {

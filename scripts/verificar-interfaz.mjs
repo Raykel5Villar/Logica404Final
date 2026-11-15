@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import { conectar, esperar } from './cdp.mjs'
+import { fechaLocal } from '../src/domain/datos.js'
 
 const cdp = await conectar()
 const log = []
@@ -80,7 +81,7 @@ try {
     await ir('/demo'); await pulsar('Entrar con este perfil', '.demo-profile:last-child button')
     assert.match(await texto(), /PANEL DE AGENTE/)
     const demo = (await datos()).vuelos.find(v => v.idVuelo === 'vuelo-checkin-demo')
-    await rellenar('.agent-filters input[type=date]', demo.horaPartida.slice(0, 10))
+    await rellenar('.agent-filters input[type=date]', fechaLocal(demo.horaPartida))
     await evaluar(`document.querySelector('button[aria-label^="Editar L4 404"]').click()`)
     await rellenar('.modal input[maxlength="8"]', 'C9')
     await pulsar('Guardar cambios', '.modal button')
